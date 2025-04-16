@@ -7,21 +7,26 @@ export interface IView {
 
 export class View implements IView {
 	element: HTMLElement;
+
 	constructor(tagName = 'div', className = '') {
 		this.element = this.createElement(tagName, className);
 	}
+
 	createElement(tagName: string, className = ''): HTMLElement {
 		const el = document.createElement(tagName);
 		if (className) el.className = className;
 		return el;
 	}
+
 	addChild(child: Node): void {
-		if (child instanceof View) {
-			this.element.appendChild(child.render());
+		// Если child имеет метод render, то вызываем его
+		if ((child as any).render instanceof Function) {
+			this.element.appendChild((child as any).render());
 		} else {
 			this.element.appendChild(child);
 		}
 	}
+
 	render(): HTMLElement {
 		return this.element;
 	}

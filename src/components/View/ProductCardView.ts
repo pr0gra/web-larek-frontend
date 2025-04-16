@@ -1,50 +1,74 @@
 import { IProduct } from '../../types/IProduct';
+import { CDN_URL } from '../../utils/constants';
 import { IView, View } from './abstracts/View';
+import { ProductDetailModal } from './ProductDetailModal';
 
-interface IProductCardView extends IView {
+export interface IProductCardView extends IView {
 	product: IProduct;
 	init(): void;
 }
 
 export class ProductCardView extends View implements IProductCardView {
 	product: IProduct;
+	private cardTitle: HTMLElement;
+	private cardPrice: HTMLElement;
+	private cardCategory: HTMLElement;
+	private cardImage: HTMLImageElement;
+
 	constructor(product: IProduct) {
 		super('div', 'product-card');
 		this.product = product;
 	}
+
 	init(): void {
-		const template = document.getElementById(
-			'card-preview'
-		) as HTMLTemplateElement;
-		if (template) {
+		const template = document.getElementById('card-catalog') as HTMLTemplateElement;
 			const content = template.content.cloneNode(true) as DocumentFragment;
-			const titleEl = content.querySelector('.card__title') as HTMLElement;
-			const categoryEl = content.querySelector(
-				'.card__category'
-			) as HTMLElement;
-			const priceEl = content.querySelector('.card__price') as HTMLElement;
-			const imageEl = content.querySelector('.card__image') as HTMLImageElement;
 
-			if (titleEl) titleEl.textContent = this.product.title;
-			if (categoryEl) categoryEl.textContent = this.product.category;
-			if (priceEl) priceEl.textContent = `${this.product.price} синапсов`;
-			if (imageEl) imageEl.src = this.product.image;
+			this.cardTitle = content.querySelector('.card__title');
+			this.cardPrice = content.querySelector('.card__price');
+			this.cardCategory = content.querySelector('.card__category');
+			this.cardImage = content.querySelector('.card__image');
 
+			this.cardTitle.textContent = this.product.title;
+			this.cardCategory.textContent = this.product.category;
+			this.cardPrice.textContent = `${this.product.price} синапсов`;
+			this.cardImage.src = `${CDN_URL}${this.product.image}`;
+
+			const getCatergoryClassname = () => {
+				switch (this.product.category) {
+					case 'софт-скил':
+						return 'card__category_soft';
+					case 'другое':
+						return 'card__category_other';
+					case 'дополнительное':
+						return 'card__category_additional';
+					case 'кнопка':
+						return 'card__category_button';
+					case 'хард-скил':
+						return 'card__category_hard';
+					default:
+						return 'card__category_other';
+				}
+			};
+
+			this.cardCategory.classList.add(getCatergoryClassname());
+
+			// if (titleEl) titleEl.textContent = this.product.title;
+			// if (categoryEl) categoryEl.textContent = this.product.category;
+			// if (priceEl) priceEl.textContent = `${this.product.price} синапсов`;
+			// if (imageEl) imageEl.src = this.product.image;
+
+			// Устанавливаем корневой элемент карточки
 			this.element = content.firstElementChild as HTMLElement;
 
-			const button = this.element.querySelector('.card__button') as HTMLElement;
-			if (button) {
-				button.addEventListener('click', () => {
-					this.element.dispatchEvent(
-						new CustomEvent('addToCart', {
-							detail: this.product,
-							bubbles: true,
-						})
-					);
-				});
-			}
-		} else {
-			this.element.textContent = this.product.title;
-		}
+			// Обработчик клика по карточке для открытия модалки с детальным описанием товара
+			this.element.addEventListener('click', (e: MouseEvent) => {
+				// Если клик пришел не с кнопки "Добавить в корзину", то открываем модальное окно
+				if (!(e.target as HTMLElement).closest('.card__button')) {
+					const detailModal = new ProductDetailModal(this.product);
+					detailModal.init();
+					detailModal.open();
+				}
+			});
 	}
 }

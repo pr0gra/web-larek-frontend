@@ -1,4 +1,6 @@
 import { IProduct } from "../../types/IProduct";
+import { ICartManager } from "../Model/CartManager";
+import { ICartPresenter } from "../Presenter/CartPresenter";
 import { IView, View } from "./abstracts/View";
 import { ProductCardView } from "./ProductCardView";
 
@@ -11,8 +13,8 @@ export interface IHomePageView extends IView {
 export class HomePageView extends View implements IHomePageView {
 	productsContainer: HTMLElement;
 	constructor() {
-		super('div', 'home-page');
-		this.productsContainer = this.createElement('div', 'products-container');
+		super('div', 'page__wrapper');
+		this.productsContainer = this.createElement('main', 'gallery');
 	}
 	init(): void {
 		this.addChild(this.productsContainer);
@@ -25,4 +27,5 @@ export class HomePageView extends View implements IHomePageView {
 			this.productsContainer.appendChild(productCard.render());
 		});
 	}
+	
 }
