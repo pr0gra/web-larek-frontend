@@ -2,6 +2,7 @@ import { IProduct } from '../../types/IProduct';
 import { ICartManager } from '../Model/CartManager';
 import { IFormPresenter } from '../Presenter/FormPresenter';
 import { IModal, Modal } from './abstracts/Modal';
+import { IView } from './abstracts/View';
 import { CartProductView } from './CartProductView';
 
 export interface ICartModalView extends IModal {
@@ -26,8 +27,8 @@ export class CartModalView extends Modal implements ICartModalView {
 
 	init(): void {
 		const template = document.getElementById('basket') as HTMLTemplateElement;
-		const content = template.content.cloneNode(true) as DocumentFragment;
-		this.setContent(content as DocumentFragment);
+		const content = template.content.cloneNode(true) as HTMLElement & IView;
+		this.setContent(content as HTMLElement & IView);
 		this.listElement = this.element.querySelector(
 			'.basket__list'
 		) as HTMLElement;

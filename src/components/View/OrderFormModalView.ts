@@ -1,6 +1,7 @@
 import { EPaymentMethod } from '../../types/EPaymentMethod';
 import { ICartManager } from '../Model/CartManager';
 import { IModal, Modal } from './abstracts/Modal';
+import { IView } from './abstracts/View';
 
 export interface IOrderFormModalView extends IModal {
 	form: HTMLFormElement;
@@ -40,7 +41,7 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 
 	private initOrderForm(): void {
 		const template = document.getElementById('order') as HTMLTemplateElement;
-		const content = template.content.cloneNode(true) as DocumentFragment;
+		const content = template.content.cloneNode(true) as HTMLElement & IView;
 		this.setContent(content);
 		this.form = this.element.querySelector('.form') as HTMLFormElement;
 
@@ -81,12 +82,12 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 			}
 		});
 
-		this.form.addEventListener('change', (e: Event) => this.onChange(e));
+		this.form.addEventListener('change', () => this.onChange());
 	}
 
 	private initContactsModal(): void {
 		const template = document.getElementById('contacts') as HTMLTemplateElement;
-		const content = template.content.cloneNode(true) as DocumentFragment;
+		const content = template.content.cloneNode(true) as HTMLElement & IView;
 		this.contactsModal.setContent(content);
 
 		const contactsForm = this.contactsModal.element.querySelector(

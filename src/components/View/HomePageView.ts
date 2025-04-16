@@ -15,7 +15,7 @@ export class HomePageView extends View implements IHomePageView {
 		this.productsContainer = this.createElement('main', 'gallery');
 	}
 	init(): void {
-		this.addChild(this.productsContainer);
+		this.addChild(this.productsContainer as HTMLElement & IView);
 	}
 	renderProducts(products: IProduct[]): void {
 		this.productsContainer.innerHTML = '';
