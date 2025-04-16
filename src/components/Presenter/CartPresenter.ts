@@ -7,7 +7,6 @@ export interface ICartPresenter {
 	cartManager: ICartManager;
 	apiService: IApiService;
 	cartModalView: ICartModalView;
-	handleChangeForm(): void;
 	handleUpdateCart(): void;
 }
 
@@ -39,7 +38,7 @@ export class CartPresenter implements ICartPresenter {
 		console.log(basketButton);
 		basketButton.addEventListener('click', () => {
 			this.handleUpdateCart();
-			this.cartModalView.open(); // Открываем модальное окно корзины
+			this.cartModalView.open(); 
 		});
 	}
 
@@ -48,9 +47,5 @@ export class CartPresenter implements ICartPresenter {
 		const total = this.cartManager.calculateTotalPrice();
 		console.log(products);
 		this.cartModalView.updateCart(products, total);
-	}
-
-	handleChangeForm(): void {
-		// Здесь можно реализовать изменение состояния формы заказа
 	}
 }

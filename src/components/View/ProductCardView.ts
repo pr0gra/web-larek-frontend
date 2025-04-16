@@ -53,17 +53,9 @@ export class ProductCardView extends View implements IProductCardView {
 
 			this.cardCategory.classList.add(getCatergoryClassname());
 
-			// if (titleEl) titleEl.textContent = this.product.title;
-			// if (categoryEl) categoryEl.textContent = this.product.category;
-			// if (priceEl) priceEl.textContent = `${this.product.price} синапсов`;
-			// if (imageEl) imageEl.src = this.product.image;
-
-			// Устанавливаем корневой элемент карточки
 			this.element = content.firstElementChild as HTMLElement;
 
-			// Обработчик клика по карточке для открытия модалки с детальным описанием товара
 			this.element.addEventListener('click', (e: MouseEvent) => {
-				// Если клик пришел не с кнопки "Добавить в корзину", то открываем модальное окно
 				if (!(e.target as HTMLElement).closest('.card__button')) {
 					const detailModal = new ProductDetailModal(this.product);
 					detailModal.init();

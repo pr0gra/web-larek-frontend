@@ -15,7 +15,6 @@ export class ProductDetailModal extends Modal {
 			'card-preview'
 		) as HTMLTemplateElement;
 		const content = template.content.cloneNode(true) as DocumentFragment;
-		// Заполняем элементы шаблона информацией о товаре
 		const imageEl = content.querySelector('.card__image') as HTMLImageElement;
 		const categoryEl = content.querySelector('.card__category') as HTMLElement;
 		const titleEl = content.querySelector('.card__title') as HTMLElement;
@@ -32,7 +31,6 @@ export class ProductDetailModal extends Modal {
 		descriptionEl.textContent = this.product.description;
 		priceEl.textContent = `${this.product.price} синапсов`;
 
-		// Обработка события для кнопки «Добавить в корзину»
 
 		addToCartBtn.addEventListener('click', () => {
 			this.element.dispatchEvent(
@@ -44,7 +42,6 @@ export class ProductDetailModal extends Modal {
 			this.close();
 		});
 		closeBtn.addEventListener('click', () => this.close());
-		// Устанавливаем содержимое модального окна с помощью базового метода
 		this.setContent(content as any);
 	}
 }

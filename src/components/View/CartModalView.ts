@@ -26,11 +26,8 @@ export class CartModalView extends Modal implements ICartModalView {
 
 	init(): void {
 		const template = document.getElementById('basket') as HTMLTemplateElement;
-		// Клонируем шаблон корзины
 		const content = template.content.cloneNode(true) as DocumentFragment;
-		// Устанавливаем в базовый блок модального окна содержимое шаблона корзины
-		this.setContent(content as any);
-		// Получаем внутренние элементы для списка и итоговой суммы
+		this.setContent(content as DocumentFragment);
 		this.listElement = this.element.querySelector(
 			'.basket__list'
 		) as HTMLElement;
@@ -47,15 +44,6 @@ export class CartModalView extends Modal implements ICartModalView {
 			this.formPrecenterOpen()
 		});
 	}
-
-	// renderProducts(): void {
-	// 	this.listElement.innerHTML = '';
-	// 	products.forEach((product) => {
-	// 		const productCard = new ProductCardView(product);
-	// 		productCard.init();
-	// 		this.productsContainer.appendChild(productCard.render());
-	// 	});
-	// }
 
 	updateCart(items: IProduct[], total: number): void {
 		if (this.listElement) {

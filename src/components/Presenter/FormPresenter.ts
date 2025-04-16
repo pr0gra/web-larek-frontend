@@ -1,6 +1,6 @@
 import { IApiService } from '../Model/ApiService';
 import { ICartManager } from '../Model/CartManager';
-import { IOrderForm, IOrderFormModalView, OrderFormModalView } from '../View/OrderFormModalView';
+import { IContactsForm, IOrderForm, IOrderFormModalView, OrderFormModalView } from '../View/OrderFormModalView';
 import { IOrderRequest } from '../../types/IOrderRequest';
 import { IOrderResponse } from '../../types/IOrderResponse';
 import { SuccessModalView } from '../View/SuccessModalView';
@@ -11,7 +11,6 @@ export interface IFormPresenter {
     formModalView: IOrderFormModalView;
     open(): void;
     orderProducts(): Promise<IOrderResponse | null>;
-    updateForm(): void;
 }
 
 export class FormPresenter implements IFormPresenter {
@@ -33,18 +32,14 @@ export class FormPresenter implements IFormPresenter {
     }
 
     private setupEventListeners(): void {
-        // Подписываемся на событие отправки формы контактов
         this.formModalView.element.addEventListener('orderSubmit', (e: Event) => {
             const customEvent = e as CustomEvent<IOrderForm>;
 			console.log(customEvent.detail)
             this.handleOrderFormSubmit(customEvent.detail);
         });
-
-        // Можно добавить обработчик для формы контактов, если нужно
     }
 
-    private handleOrderFormSubmit(formData: IOrderForm): void {
-        // Сохраняем данные формы заказа
+    private handleOrderFormSubmit(formData: IOrderForm & IContactsForm): void {
         this.orderData = {
             email: formData.email,
             phone: formData.phone,
@@ -57,10 +52,6 @@ export class FormPresenter implements IFormPresenter {
 
     async orderProducts(): Promise<IOrderResponse | null> {
         try {
-            // Проверяем, что все необходимые данные собраны
-           
-
-            // Формируем полный запрос
             const request: IOrderRequest = {
                 ...this.orderData as Required<Pick<IOrderRequest, 'payment' | 'address'>>,
                 email: this.orderData.email || '',
@@ -71,14 +62,11 @@ export class FormPresenter implements IFormPresenter {
 
             console.log(request)
 
-            // Отправляем запрос на сервер
             const response = await this.apiService.submitOrder(request);
             
-            // Очищаем корзину после успешного заказа
             this.cartManager.clear();
             this.showSuccessModal(request.total);
             
-            // Возвращаем ответ сервера
             return response;
         } catch (error) {
             console.error('Ошибка при оформлении заказа:', error);
@@ -90,9 +78,5 @@ export class FormPresenter implements IFormPresenter {
         const successModal = new SuccessModalView(total);
         successModal.init();
         successModal.open();
-    }
-
-    updateForm(): void {
-        // Можно добавить логику обновления формы при необходимости
     }
 }

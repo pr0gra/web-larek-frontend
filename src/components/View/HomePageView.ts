@@ -1,6 +1,4 @@
 import { IProduct } from "../../types/IProduct";
-import { ICartManager } from "../Model/CartManager";
-import { ICartPresenter } from "../Presenter/CartPresenter";
 import { IView, View } from "./abstracts/View";
 import { ProductCardView } from "./ProductCardView";
 

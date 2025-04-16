@@ -18,10 +18,9 @@ export class View implements IView {
 		return el;
 	}
 
-	addChild(child: Node): void {
-		// Если child имеет метод render, то вызываем его
-		if ((child as any).render instanceof Function) {
-			this.element.appendChild((child as any).render());
+	addChild(child: HTMLElement & IView): void {
+		if ((child as HTMLElement & IView).render instanceof Function) {
+			this.element.appendChild((child as HTMLElement & IView).render());
 		} else {
 			this.element.appendChild(child);
 		}

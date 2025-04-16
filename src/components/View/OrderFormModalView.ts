@@ -1,6 +1,4 @@
 import { EPaymentMethod } from '../../types/EPaymentMethod';
-import { IOrderRequest } from '../../types/IOrderRequest';
-import { IOrderResponse } from '../../types/IOrderResponse';
 import { ICartManager } from '../Model/CartManager';
 import { IModal, Modal } from './abstracts/Modal';
 
@@ -15,13 +13,11 @@ export interface IOrderFormModalView extends IModal {
 export interface IOrderForm {
 	payment?: EPaymentMethod;
 	address?: string;
-	[key: string]: any;
 }
 
 export interface IContactsForm {
 	email?: string;
 	phone?: string;
-	[key: string]: any;
 }
 
 export class OrderFormModalView extends Modal implements IOrderFormModalView {
@@ -33,7 +29,7 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 
 	constructor(cartManager: ICartManager) {
 		super();
-		this.contactsModal = new Modal(); // Создаем экземпляр модального окна для контактов
+		this.contactsModal = new Modal(); 
 		this.cartManager = cartManager;
 	}
 
@@ -48,7 +44,6 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 		this.setContent(content);
 		this.form = this.element.querySelector('.form') as HTMLFormElement;
 
-		// Инициализация кнопок оплаты
 		const paymentButtons = this.element.querySelectorAll(
 			'.button_alt'
 		) as NodeListOf<HTMLButtonElement>;
@@ -69,11 +64,10 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 					this.form.appendChild(paymentInput);
 				}
 				paymentInput.value = this.selectedPayment;
-				this.onChange(new Event('change'));
+				this.onChange();
 			});
 		});
 
-		// Обработчик отправки формы заказа
 		this.form.addEventListener('submit', (e: Event) => {
 			e.preventDefault();
 			if (this.validate()) {
@@ -99,7 +93,6 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 			'.form'
 		) as HTMLFormElement;
 
-		// Валидация формы контактов
 		contactsForm.addEventListener('change', () => {
 			const submitButton = contactsForm.querySelector(
 				'button[type="submit"]'
@@ -125,12 +118,7 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 				email: formData.get('email') as string,
 				phone: formData.get('phone') as string,
 			};
-			// document.addEventListener('addToCart', (e: Event) => {
-			// 	const customEvent = e as CustomEvent<IOrderRequest>;
-			// 	this.cartManager.addItem(customEvent.detail);
-			// });
 
-			// Диспатчим событие с полными данными заказа
 			this.element.dispatchEvent(
 				new CustomEvent('orderSubmit', {
 					detail: {
@@ -149,7 +137,7 @@ export class OrderFormModalView extends Modal implements IOrderFormModalView {
 		this.contactsModal.open();
 	}
 
-	onChange(e: Event): void {
+	onChange(): void {
 		const submitButton = this.element.querySelector(
 			'button[type="submit"]'
 		) as HTMLButtonElement;
