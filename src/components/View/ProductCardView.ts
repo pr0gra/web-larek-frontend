@@ -1,5 +1,6 @@
 import { IProduct } from '../../types/IProduct';
 import { CDN_URL } from '../../utils/constants';
+import { ICartManager } from '../Model/CartManager';
 import { IView, View } from './abstracts/View';
 import { ProductDetailModal } from './ProductDetailModal';
 
@@ -14,10 +15,12 @@ export class ProductCardView extends View implements IProductCardView {
 	private cardPrice: HTMLElement;
 	private cardCategory: HTMLElement;
 	private cardImage: HTMLImageElement;
+	private cartManager: ICartManager
 
-	constructor(product: IProduct) {
+	constructor(product: IProduct, cartManager: ICartManager) {
 		super('div', 'product-card');
 		this.product = product;
+		this.cartManager = cartManager
 	}
 
 	init(): void {
@@ -57,7 +60,7 @@ export class ProductCardView extends View implements IProductCardView {
 
 			this.element.addEventListener('click', (e: MouseEvent) => {
 				if (!(e.target as HTMLElement).closest('.card__button')) {
-					const detailModal = new ProductDetailModal(this.product);
+					const detailModal = new ProductDetailModal(this.product, this.cartManager);
 					detailModal.init();
 					detailModal.open();
 				}

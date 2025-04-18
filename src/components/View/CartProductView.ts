@@ -12,21 +12,18 @@ export class CartProductView extends View implements ICartProductView {
 	index: number;
 
 	constructor(product: IProduct, index: number) {
-		// Создаем обёртку для карточки товара в корзине
 		super('li', 'basket__item card card_compact');
 		this.product = product;
 		this.index = index;
 	}
 
 	init(): void {
-		console.log(this.product);
 		const template = document.getElementById(
 			'card-basket'
 		) as HTMLTemplateElement;
 		const content = template.content.cloneNode(true) as DocumentFragment;
 		this.element = content.firstElementChild as HTMLElement;
 
-		// Заполняем данные карточки товара
 		const indexEl = this.element.querySelector(
 			'.basket__item-index'
 		) as HTMLElement;
@@ -40,7 +37,6 @@ export class CartProductView extends View implements ICartProductView {
 		titleEl.textContent = this.product.title;
 		priceEl.textContent = `${this.product.price} синапсов`;
 
-		// Обработчик клика по кнопке удаления товара
 		deleteButton.addEventListener('click', () => {
 			this.element.dispatchEvent(
 				new CustomEvent('removeFromCart', {

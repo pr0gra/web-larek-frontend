@@ -1,13 +1,16 @@
 import { IProduct } from '../../types/IProduct';
 import { CDN_URL } from '../../utils/constants';
+import { ICartManager } from '../Model/CartManager';
 import { Modal } from './abstracts/Modal';
 
 export class ProductDetailModal extends Modal {
 	private product: IProduct;
+	private cartManager: ICartManager
 
-	constructor(product: IProduct) {
+	constructor(product: IProduct, cartManager: ICartManager) {
 		super();
 		this.product = product;
+		this.cartManager = cartManager
 	}
 
 	init(): void {
@@ -33,6 +36,10 @@ export class ProductDetailModal extends Modal {
 
 
 		addToCartBtn.addEventListener('click', () => {
+			const productsInCart = this.cartManager.getProducts()
+			if(productsInCart.find(pr => this.product.id === pr.id)){
+				return
+			}
 			this.element.dispatchEvent(
 				new CustomEvent('addToCart', {
 					detail: this.product,

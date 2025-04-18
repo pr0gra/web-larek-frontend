@@ -46,10 +46,12 @@ export class Modal extends View implements IModal {
 	}
 
 	open(): void {
+		document.body.style.overflow = 'hidden'
 		document.body.appendChild(this.element);
 	}
 
 	close(): void {
+		document.body.style.overflow = 'auto'
 		if (this.element.parentNode) {
 			this.element.parentNode.removeChild(this.element);
 		}

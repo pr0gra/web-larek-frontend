@@ -16,13 +16,12 @@ export class CartModalView extends Modal implements ICartModalView {
 	listElement: HTMLElement;
 	totalElement: HTMLElement;
 	cartManager: ICartManager;
-	formPrecenterOpen: () => void
+	formPrecenterOpen: () => void;
 
 	constructor(cartManager: ICartManager, formPrecenter: IFormPresenter) {
-		// Вызов базового конструктора – внутри него клонируется шаблон модального окна (modal-container)
 		super();
 		this.cartManager = cartManager;
-		this.formPrecenterOpen = () => formPrecenter.open()
+		this.formPrecenterOpen = () => formPrecenter.open();
 	}
 
 	init(): void {
@@ -39,10 +38,11 @@ export class CartModalView extends Modal implements ICartModalView {
 			'.basket__button'
 		) as HTMLElement;
 		const closeBtn = this.element.querySelector('.modal__close') as HTMLElement;
-		console.log(template)
+		console.log(template);
 		closeBtn.addEventListener('click', () => this.close());
 		orderButton.addEventListener('click', () => {
-			this.formPrecenterOpen()
+			if (!this.cartManager.getProducts.length) return;
+			this.formPrecenterOpen();
 		});
 	}
 
